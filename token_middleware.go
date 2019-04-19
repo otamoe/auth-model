@@ -16,6 +16,7 @@ import (
 
 	"github.com/globalsign/mgo"
 	"github.com/otamoe/gin-server/errs"
+	ginLogger "github.com/otamoe/gin-server/logger"
 	"github.com/sirupsen/logrus"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -287,6 +288,10 @@ func GetToken(ctx *gin.Context, types []string, val string, expired bool, cache 
 			err = ErrUserNotFound
 			return
 		}
+
+		logger := ctx.MustGet(ginLogger.CONTEXT).(*ginLogger.Logger)
+		logger.TokenID = token.ID
+		logger.UserID = token.UserID
 		ctx.Set(key, token)
 	}
 
