@@ -52,8 +52,6 @@ type (
 )
 
 var (
-	AUTH          = ""
-	USER          = ""
 	CONTEXT_TOKEN = scope.CONTEXT
 
 	ErrTokenRequired error = &errs.Error{

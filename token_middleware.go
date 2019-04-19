@@ -311,7 +311,7 @@ func GetToken(ctx *gin.Context, types []string, val string, expired bool, cache 
 	return
 }
 
-func init() {
+func initToken() {
 	var err error
 	var publicKeys *TokenPublicKeys
 	if publicKeys, err = requestTokenPublicKeys(); err != nil {
