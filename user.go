@@ -26,8 +26,6 @@ type User struct {
 }
 
 var (
-	CONTEXT_USER = "MODEL.USER"
-
 	ErrUserRequired error = &errs.Error{
 		Message:    "User is required",
 		Path:       "user",

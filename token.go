@@ -20,6 +20,7 @@ type (
 	Token struct {
 		mgoModel.DocumentBase `json:"-" bson:"-"`
 		ID                    bson.ObjectId `json:"_id" bson:"_id"`
+		Type                  string        `json:"type" bson:"type"`
 		UserID                bson.ObjectId `json:"user_id" bson:"user"`
 		User                  *User         `json:"user,omitempty" bson:"-" populate:"UserID"`
 		ApplicationID         bson.ObjectId `json:"application_id" bson:"application"`
@@ -51,6 +52,8 @@ type (
 )
 
 var (
+	AUTH          = ""
+	USER          = ""
 	CONTEXT_TOKEN = scope.CONTEXT
 
 	ErrTokenRequired error = &errs.Error{
