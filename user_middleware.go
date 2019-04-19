@@ -36,8 +36,12 @@ func GetUser(ctx *gin.Context, val string) (user *User, err error) {
 		user = value.(*User)
 	} else {
 		if val == "me" {
-			if v, ok := ctx.Get("user"); ok {
-				user = v.(*User)
+			if v, ok := ctx.Get(CONTEXT_TOKEN); ok {
+				user = v.(*Token).User
+				if user == nil {
+					err = ErrUserNotFound
+					return
+				}
 				val = user.ID.Hex()
 			} else {
 				err = ErrUserNotFound
