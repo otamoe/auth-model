@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"crypto/ecdsa"
 	"crypto/x509"
 	"encoding/json"
@@ -106,12 +107,13 @@ func requestTokenPublicKeys() (publicKeys *TokenPublicKeys, err error) {
 	var request *http.Request
 	var response *http.Response
 
-	client := &http.Client{
-		Timeout: time.Duration(8 * time.Second),
-	}
+	timeoutContext, timeoutCancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer timeoutCancel()
+	client := &http.Client{}
 	if request, err = http.NewRequest("GET", AUTH+"/keys", nil); err != nil {
 		return
 	}
+	request = request.WithContext(timeoutContext)
 	if response, err = client.Do(request); err != nil {
 		return
 	}
@@ -155,14 +157,15 @@ func requestToken(auth string) (token *Token, err error) {
 	var request *http.Request
 	var response *http.Response
 
-	client := &http.Client{
-		Timeout: time.Duration(8 * time.Second),
-	}
+	timeoutContext, timeoutCancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer timeoutCancel()
+	client := &http.Client{}
 	if request, err = http.NewRequest("GET", USER+"/me/token/me/", nil); err != nil {
 		return
 	}
-	request.Header.Add("Authorization", "Bearer "+auth)
+	request = request.WithContext(timeoutContext)
 
+	request.Header.Add("Authorization", "Bearer "+auth)
 	if response, err = client.Do(request); err != nil {
 		return
 	}
