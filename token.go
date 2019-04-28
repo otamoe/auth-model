@@ -98,7 +98,6 @@ func (token *Token) ValidateScope(resource *ginResource.Resource) (params map[st
 	now := time.Now()
 	scopes := SortScopes{}
 
-	ownerID := resource.GetOwner()
 	for _, userScope := range token.UserScopes {
 		if userScope == nil {
 			continue
@@ -164,13 +163,13 @@ func (token *Token) ValidateScope(resource *ginResource.Resource) (params map[st
 				continue
 			} else if scopeRole.User == "*" {
 
-			} else if !ownerID.Valid() {
+			} else if !resource.Owner.Valid() {
 				continue
 			} else if scopeRole.User == "me" {
-				if token.UserID != ownerID {
+				if token.UserID != resource.Owner {
 					continue
 				}
-			} else if scopeRole.User != ownerID.Hex() {
+			} else if scopeRole.User != resource.Owner.Hex() {
 				continue
 			}
 
@@ -191,8 +190,8 @@ func (token *Token) ValidateScope(resource *ginResource.Resource) (params map[st
 
 	errParams := bson.M{"action": resource.Action, "type": resource.Type, "application_id": resource.Application}
 
-	if ownerID.Valid() {
-		errParams["owner_id"] = ownerID
+	if resource.Owner.Valid() {
+		errParams["owner_id"] = resource.Owner
 	}
 	err = &errs.Error{
 		Message:    fmt.Sprintf("Validate Scope"),
