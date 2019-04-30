@@ -104,13 +104,17 @@ func TokenMiddleware(c TokenConfig) gin.HandlerFunc {
 }
 
 func requestTokenPublicKeys() (publicKeys *TokenPublicKeys, err error) {
+	if AuthOrigin == "" {
+		err = errors.New("auth-model.AuthOrigin variable not configured")
+		return
+	}
 	var request *http.Request
 	var response *http.Response
 
 	timeoutContext, timeoutCancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer timeoutCancel()
 	client := &http.Client{}
-	if request, err = http.NewRequest("GET", AUTH+"/keys", nil); err != nil {
+	if request, err = http.NewRequest("GET", AuthOrigin+"/keys", nil); err != nil {
 		return
 	}
 	request = request.WithContext(timeoutContext)
@@ -154,13 +158,17 @@ func requestTokenPublicKeys() (publicKeys *TokenPublicKeys, err error) {
 }
 
 func requestToken(auth string) (token *Token, err error) {
+	if UserOrigin == "" {
+		err = errors.New("auth-model.UserOrigin variable not configured")
+		return
+	}
 	var request *http.Request
 	var response *http.Response
 
 	timeoutContext, timeoutCancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer timeoutCancel()
 	client := &http.Client{}
-	if request, err = http.NewRequest("GET", USER+"/me/token/me/", nil); err != nil {
+	if request, err = http.NewRequest("GET", UserOrigin+"/me/token/me/", nil); err != nil {
 		return
 	}
 	request = request.WithContext(timeoutContext)
@@ -319,7 +327,7 @@ func GetToken(ctx *gin.Context, types []string, val string, expired bool, cache 
 	return
 }
 
-func initToken() {
+func initTokenPublicKeys() {
 	var err error
 	var publicKeys *TokenPublicKeys
 	if publicKeys, err = requestTokenPublicKeys(); err != nil {

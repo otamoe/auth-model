@@ -1,12 +1,19 @@
 package model
 
 var (
-	AUTH = ""
-	USER = ""
+	AuthOrigin   string
+	UserOrigin   string
+	ClientID     string
+	ClientSecret string
 )
 
-func Start(auth string, user string) {
-	AUTH = auth
-	USER = user
-	initToken()
+func Config(authOrigin string, userOrigin string, clientID string, clientSecret string) {
+	AuthOrigin = authOrigin
+	UserOrigin = userOrigin
+	ClientID = clientID
+	ClientSecret = clientSecret
+}
+
+func Start() {
+	initTokenPublicKeys()
 }

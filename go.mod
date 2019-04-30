@@ -7,4 +7,5 @@ require (
 	github.com/otamoe/gin-server v0.0.0-20190428104039-dc0b3530b487
 	github.com/otamoe/mgo-model v0.0.0-20190412052249-cb4bbacc4d83
 	github.com/sirupsen/logrus v1.4.1
+	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
 )
