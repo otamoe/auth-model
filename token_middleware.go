@@ -54,7 +54,7 @@ type (
 		Results []*TokenPublicKey `json:"results"`
 	}
 
-	TokenErrors struct {
+	Errors struct {
 		Errors     []*errs.Error `json:"errors,omitempty"`
 		StatusCode int           `json:"status_code,omitempty"`
 	}
@@ -186,7 +186,7 @@ func requestToken(auth string) (token *Token, err error) {
 	logrus.Debugf("[TOKEN] %d %s", response.StatusCode, string(bodyBytes))
 
 	if response.StatusCode >= http.StatusMultipleChoices {
-		tokenErrors := &TokenErrors{}
+		tokenErrors := &Errors{}
 		if err = json.Unmarshal(bodyBytes, tokenErrors); err != nil {
 			return
 		}
