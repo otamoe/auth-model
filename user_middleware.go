@@ -81,6 +81,7 @@ func GetUser(ctx *gin.Context, val string, cache bool, fetch bool) (user *User, 
 					if err != mgo.ErrNotFound {
 						return
 					}
+					user = &User{}
 					err = nil
 				} else if cache {
 					user.New(ctx, ModelUser, user, true)
